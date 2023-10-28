@@ -1,93 +1,11 @@
 import {FETCH_POSTS} from './Types'
 
+// json file
+import productData from '../../assets/products.json'
+
 export const fetchProducts = () => {
   return{
     type:FETCH_POSTS,
-    payload:[
-      {
-        id:1,
-        product_img:"imag1",
-        product_name:"Watch",
-        product_quantity:3,
-        product_price:1400
-      },
-      {
-        id:2,
-        product_img:"imag1",
-        product_name:"Car",
-        product_quantity:3,
-        product_price:1400
-      },
-      {
-        id:3,
-        product_img:"imag1",
-        product_name:"Bike",
-        product_quantity:3,
-        product_price:1400
-      },
-      {
-        id:4,
-        product_img:"imag1",
-        product_name:"Watch",
-        product_quantity:3,
-        product_price:1400
-      },
-      {
-        id:5,
-        product_img:"imag1",
-        product_name:"Car",
-        product_quantity:3,
-        product_price:1400
-      },
-      {
-        id:6,
-        product_img:"imag1",
-        product_name:"Bike",
-        product_quantity:3,
-        product_price:1400
-      },
-      {
-        id:7,
-        product_img:"imag1",
-        product_name:"Watch",
-        product_quantity:3,
-        product_price:1400
-      },
-      {
-        id:8,
-        product_img:"imag1",
-        product_name:"Car",
-        product_quantity:3,
-        product_price:1400
-      },
-      {
-        id:9,
-        product_img:"imag1",
-        product_name:"Bike",
-        product_quantity:3,
-        product_price:1400
-      },
-      {
-        id:10,
-        product_img:"imag1",
-        product_name:"Watch",
-        product_quantity:3,
-        product_price:1400
-      },
-      {
-        id:11,
-        product_img:"imag1",
-        product_name:"Car",
-        product_quantity:3,
-        product_price:1400
-      },
-      {
-        id:12,
-        product_img:"imag1",
-        product_name:"Bike",
-        product_quantity:3,
-        product_price:1400
-      }
-    ]
+    payload:productData.products
   }
 }
