@@ -68,21 +68,21 @@ export const fetchProducts = () => {
         product_price:1400
       },
       {
-        id:4,
+        id:10,
         product_img:"imag1",
         product_name:"Watch",
         product_quantity:3,
         product_price:1400
       },
       {
-        id:5,
+        id:11,
         product_img:"imag1",
         product_name:"Car",
         product_quantity:3,
         product_price:1400
       },
       {
-        id:6,
+        id:12,
         product_img:"imag1",
         product_name:"Bike",
         product_quantity:3,

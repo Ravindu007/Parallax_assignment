@@ -5,7 +5,7 @@ const ProductCard = ({ product }) => {
   // Use the product data from Redux store here
   return (
     <div className='col-sm-12 col-md-4'>
-      <div className="card mx-1 my-1  md:h-[80px]">
+      <div className="card mx-1 my-1  md:h-[100px]">
         <h2>{product.product_name}</h2>
         <p>{product.product_img}</p>
       </div>
