@@ -4,7 +4,7 @@ import {FETCH_PRODUCTS} from '../actions/Types'
 export const fetchProducts = (pageNumber) => {
   return async (dispatch) => {
     try {
-      const itemsPerPage = 12; // Assuming each page contains a fixed number of items, e.g., 12 items per page
+      const itemsPerPage = 9; // Assuming each page contains a fixed number of items, e.g., 12 items per page
 
       // Calculate the starting and ending indices for the page
       const startIndex = (pageNumber - 1) * itemsPerPage;

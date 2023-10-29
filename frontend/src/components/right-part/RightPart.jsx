@@ -1,24 +1,39 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { fetchProducts } from '../../redux/actions/ProductActions';
+import ProductCard from './product-list/ProductCard/ProductCard';
 
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-
-import {fetchProducts} from '../../redux/actions/ProductActions'
-import ProductCard from './product-list/ProductCard/ProductCard'
-
-
-
-const RightPart = ({fetchProducts, allProducts}) => {
-
+const RightPart = ({ fetchProducts, allProducts }) => {
+  const [productList, setProductList] = useState([]);
   const [page, setPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
 
   const cardContainerRef = useRef(null);
 
+  // Keep track of unique product IDs that have been added to the list
+  const uniqueProductIds = useRef(new Set());
 
   useEffect(() => {
     fetchProducts(page);
   }, [fetchProducts, page]);
-  
+
+  useEffect(() => {
+    if (allProducts && Array.isArray(allProducts)) {
+      // Filter out products with IDs that are not in the uniqueProductIds set
+      const newProducts = allProducts.filter((product) => !uniqueProductIds.current.has(product.id));
+
+      if (newProducts.length > 0) {
+        // Add new product IDs to the uniqueProductIds set
+        newProducts.forEach((product) => uniqueProductIds.current.add(product.id));
+
+        // Append new products to the product list
+        setProductList((prev) => [...prev, ...newProducts]);
+      }
+
+      setIsLoading(false);
+    }
+  }, [allProducts]);
 
   const handleScroll = () => {
     if (cardContainerRef.current) {
@@ -27,7 +42,9 @@ const RightPart = ({fetchProducts, allProducts}) => {
       const containerHeight = cardContainerRef.current.clientHeight;
 
       if (scrollTop + containerHeight + 1 >= scrollHeight) {
-        setPage(page + 1);
+        setPage((prev) => prev + 1);
+        setIsLoading(true);
+        fetchProducts(page + 1);
       }
     }
   };
@@ -44,64 +61,32 @@ const RightPart = ({fetchProducts, allProducts}) => {
     };
   }, []);
 
-  
-
-  
   return (
     <div className='right-part'>
       <div className="container m-2">
-
         {/* filter row */}
         <div className="row">
-          <div className="col-4">
-              <div className="form-group">
-                <input 
-                  type="text"
-                  className='form-control'
-                  placeholder='Please Select' 
-                />
-              </div>
-          </div>
-          <div className="col-4">
-            <div className="form-group">
-                <input 
-                  type="text"
-                  className='form-control'
-                  placeholder='Please Select' 
-                />
-              </div>
-          </div>
-          <div className="col-4">
-            <div className="form-group">
-                <input 
-                  type="text"
-                  className='form-control'
-                  placeholder='Please Select' 
-                />
-              </div>
-          </div>
+          {/* ... (your filter inputs) */}
         </div>
-
         {/* product list */}
         <div className="row px-2">
-          <div 
-            className="row overflow-y-scroll md:h-[350px] border-2 border-red-500" 
+          <div
+            className="row overflow-y-scroll md:h-[350px] border-2 border-red-500"
             ref={cardContainerRef}
           >
-            {!allProducts 
-              ? 
-                <p>Loading...</p> 
-              : 
-                allProducts.map((product)=>(
-                  <ProductCard key={product.id} product={product}/>
-                ))}
+            {!productList || productList.length === 0 ? (
+              <p>Loading...</p>
+            ) : (
+              productList.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))
+            )}
           </div>
         </div>
-
       </div>
     </div>
-  )
-}
+  );
+};
 
 const mapStateToProps = (state) => {
   return {
