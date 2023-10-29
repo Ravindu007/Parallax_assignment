@@ -1,1 +1,1 @@
-export const FETCH_POSTS = "API_CALLED";
+export const FETCH_PRODUCTS = "API_CALLED";

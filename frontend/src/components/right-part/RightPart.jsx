@@ -1,7 +1,52 @@
-import React from 'react'
-import ProductList from './product-list/ProductList'
+import React, { useEffect, useRef, useState } from 'react'
 
-const RightPart = () => {
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+
+import {fetchProducts} from '../../redux/actions/ProductActions'
+import ProductCard from './product-list/ProductCard/ProductCard'
+
+
+
+const RightPart = ({fetchProducts, allProducts}) => {
+
+  const [page, setPage] = useState(1);
+
+  const cardContainerRef = useRef(null);
+
+
+  useEffect(() => {
+    fetchProducts(page);
+  }, [fetchProducts, page]);
+  
+
+  const handleScroll = () => {
+    if (cardContainerRef.current) {
+      const scrollHeight = cardContainerRef.current.scrollHeight;
+      const scrollTop = cardContainerRef.current.scrollTop;
+      const containerHeight = cardContainerRef.current.clientHeight;
+
+      if (scrollTop + containerHeight + 1 >= scrollHeight) {
+        setPage(page + 1);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (cardContainerRef.current) {
+      cardContainerRef.current.addEventListener('scroll', handleScroll);
+    }
+
+    return () => {
+      if (cardContainerRef.current) {
+        cardContainerRef.current.removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, []);
+
+  
+
+  
   return (
     <div className='right-part'>
       <div className="container m-2">
@@ -39,8 +84,17 @@ const RightPart = () => {
 
         {/* product list */}
         <div className="row px-2">
-          <div className="col-12 md:h-[350px] border-2 border-red-500 overflow-y-scroll">
-            <ProductList/>
+          <div 
+            className="row overflow-y-scroll md:h-[350px] border-2 border-red-500" 
+            ref={cardContainerRef}
+          >
+            {!allProducts 
+              ? 
+                <p>Loading...</p> 
+              : 
+                allProducts.map((product)=>(
+                  <ProductCard key={product.id} product={product}/>
+                ))}
           </div>
         </div>
 
@@ -49,4 +103,14 @@ const RightPart = () => {
   )
 }
 
-export default RightPart
+const mapStateToProps = (state) => {
+  return {
+    allProducts: state.allProducts,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({ fetchProducts: fetchProducts }, dispatch);
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(RightPart);

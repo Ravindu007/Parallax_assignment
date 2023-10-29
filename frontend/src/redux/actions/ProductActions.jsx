@@ -1,11 +1,31 @@
-import {FETCH_POSTS} from './Types'
+import {FETCH_PRODUCTS} from '../actions/Types'
 
-// json file
-import productData from '../../assets/products.json'
+// Define the action creator function with a page number parameter
+export const fetchProducts = (pageNumber) => {
+  return async (dispatch) => {
+    try {
+      const itemsPerPage = 12; // Assuming each page contains a fixed number of items, e.g., 12 items per page
 
-export const fetchProducts = () => {
-  return{
-    type:FETCH_POSTS,
-    payload:productData.products
-  }
-}
+      // Calculate the starting and ending indices for the page
+      const startIndex = (pageNumber - 1) * itemsPerPage;
+      const endIndex = pageNumber * itemsPerPage;
+
+      const response = await fetch('/products.json'); // Replace with the correct file path
+      if (response.ok) {
+        const data = await response.json();
+
+        // Extract the products for the specified page
+        const productsForPage = data.products.slice(startIndex, endIndex);
+
+        // Dispatch the action with the products for the page
+        dispatch({
+          type: FETCH_PRODUCTS, // Correct action type
+          payload: productsForPage,
+        });
+      } 
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    }
+  };
+};
+
