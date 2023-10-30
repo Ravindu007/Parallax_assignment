@@ -3,54 +3,55 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchProducts } from '../../redux/actions/ProductActions';
 import ProductCard from './product-list/ProductCard/ProductCard';
+import Loader from '../loader/Loader';
 
 const RightPart = ({ fetchProducts, allProducts }) => {
   const [productList, setProductList] = useState([]);
+  const [occurance, setOccurance] = useState(1); // check the initial load
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
 
-  const cardContainerRef = useRef(null);
+  const cardContainerRef = useRef(null); //refer the scrolling area
 
-  // Keep track of unique product IDs that have been added to the list
-  const uniqueProductIds = useRef(new Set());
+  const uniqueProductIds = useRef(new Set());  // Keep track of unique product IDs that have been added to the list
 
-
-  useEffect(() => { //fetch initial products
-    fetchProducts(page); 
-  }, [fetchProducts, page]);
+  useEffect(() => {
+    fetchProducts(page, occurance);
+  }, [page, occurance]);
 
 
-  useEffect(() => { //fetch new products on scroll and update the state(allProducts)
+  useEffect(() => { // concating new products to existing array
     if (allProducts && Array.isArray(allProducts)) {
-      // Filter out products with IDs that are not in the uniqueProductIds set
-      const newProducts = allProducts.filter((product) => !uniqueProductIds.current.has(product.id));
+      const newProducts = allProducts.filter(
+        (product) => !uniqueProductIds.current.has(product.id)
+      );
 
       if (newProducts.length > 0) {
-        // Add new product IDs to the uniqueProductIds set
-        newProducts.forEach((product) => uniqueProductIds.current.add(product.id));
-
-        // Append new products to the product list
+        newProducts.forEach((product) =>
+          uniqueProductIds.current.add(product.id)
+        );
         setProductList((prev) => [...prev, ...newProducts]);
       }
 
-      setTimeout(()=>{
-        setIsLoading(false);
-      },2000)
+      setIsLoading(false);
+      
     }
   }, [allProducts]);
 
-
-  // fetch data on scroll
   const handleScroll = () => {
     if (cardContainerRef.current) {
       const scrollHeight = cardContainerRef.current.scrollHeight;
       const scrollTop = cardContainerRef.current.scrollTop;
       const containerHeight = cardContainerRef.current.clientHeight;
 
-      if (scrollTop + containerHeight + 1 >= scrollHeight) {
-        setPage((prev) => prev + 1);
-        setIsLoading(true);
-        fetchProducts(page + 1);
+      console.log(scrollHeight, scrollTop, containerHeight);
+
+      if (scrollTop + containerHeight + 1 >= scrollHeight) { //check wether it reaches the bottom
+        setTimeout(() => {
+          setOccurance((prev) => prev + 1);
+          setPage((prev) => prev + 1);
+          setIsLoading(true);
+        }, 5000);
       }
     }
   };
@@ -67,17 +68,11 @@ const RightPart = ({ fetchProducts, allProducts }) => {
     };
   }, []);
 
-
-
   return (
     <div className='right-part'>
       <div className="container m-2">
-
         {/* filter row */}
-        <div className="row">
-          {/* ... (your filter inputs) */}
-        </div>
-
+        <div className="row">{/* ... (your filter inputs) */}</div>
         {/* product list */}
         <div className="row px-2">
           <div
@@ -87,12 +82,10 @@ const RightPart = ({ fetchProducts, allProducts }) => {
             {productList &&
               productList.map((product) => (
                 <ProductCard key={product.id} product={product} />
-              ))
-            }
-            {isLoading ? <p className='h-fit w-full bg-yellow-300 border-2 border-black'>Loading</p> : <>..</>}
+              ))}
+            {isLoading ? <Loader /> : '...'}
           </div>
         </div>
-
       </div>
     </div>
   );

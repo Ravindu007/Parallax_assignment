@@ -1,10 +1,10 @@
-import {FETCH_PRODUCTS} from '../actions/Types'
+import { FETCH_PRODUCTS } from '../actions/Types';
 
 // Define the action creator function with a page number parameter
-export const fetchProducts = (pageNumber) => {
+export const fetchProducts = (pageNumber, occurance) => {
   return async (dispatch) => {
     try {
-      const itemsPerPage = 9; // Assuming each page contains a fixed number of items, e.g., 12 items per page
+      let itemsPerPage = occurance > 1 ? 3 : 9;
 
       // Calculate the starting and ending indices for the page
       const startIndex = (pageNumber - 1) * itemsPerPage;
@@ -22,10 +22,9 @@ export const fetchProducts = (pageNumber) => {
           type: FETCH_PRODUCTS, // Correct action type
           payload: productsForPage,
         });
-      } 
+      }
     } catch (error) {
       console.error('Error fetching products:', error);
     }
   };
 };
-
