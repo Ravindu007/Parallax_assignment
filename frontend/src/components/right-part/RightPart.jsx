@@ -14,11 +14,13 @@ const RightPart = ({ fetchProducts, allProducts }) => {
   // Keep track of unique product IDs that have been added to the list
   const uniqueProductIds = useRef(new Set());
 
-  useEffect(() => {
-    fetchProducts(page);
+
+  useEffect(() => { //fetch initial products
+    fetchProducts(page); 
   }, [fetchProducts, page]);
 
-  useEffect(() => {
+
+  useEffect(() => { //fetch new products on scroll and update the state(allProducts)
     if (allProducts && Array.isArray(allProducts)) {
       // Filter out products with IDs that are not in the uniqueProductIds set
       const newProducts = allProducts.filter((product) => !uniqueProductIds.current.has(product.id));
@@ -31,10 +33,14 @@ const RightPart = ({ fetchProducts, allProducts }) => {
         setProductList((prev) => [...prev, ...newProducts]);
       }
 
-      setIsLoading(false);
+      setTimeout(()=>{
+        setIsLoading(false);
+      },2000)
     }
   }, [allProducts]);
 
+
+  // fetch data on scroll
   const handleScroll = () => {
     if (cardContainerRef.current) {
       const scrollHeight = cardContainerRef.current.scrollHeight;
@@ -61,28 +67,32 @@ const RightPart = ({ fetchProducts, allProducts }) => {
     };
   }, []);
 
+
+
   return (
     <div className='right-part'>
       <div className="container m-2">
+
         {/* filter row */}
         <div className="row">
           {/* ... (your filter inputs) */}
         </div>
+
         {/* product list */}
         <div className="row px-2">
           <div
             className="row overflow-y-scroll md:h-[350px] border-2 border-red-500"
             ref={cardContainerRef}
           >
-            {!productList || productList.length === 0 ? (
-              <p>Loading...</p>
-            ) : (
+            {productList &&
               productList.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))
-            )}
+            }
+            {isLoading ? <p className='h-fit w-full bg-yellow-300 border-2 border-black'>Loading</p> : <>..</>}
           </div>
         </div>
+
       </div>
     </div>
   );
