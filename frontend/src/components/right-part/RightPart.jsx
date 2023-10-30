@@ -51,7 +51,7 @@ const RightPart = ({ fetchProducts, allProducts }) => {
           setOccurance((prev) => prev + 1);
           setPage((prev) => prev + 1);
           setIsLoading(true);
-        }, 5000);
+        }, 100);
       }
     }
   };
@@ -76,7 +76,7 @@ const RightPart = ({ fetchProducts, allProducts }) => {
         {/* product list */}
         <div className="row px-2">
           <div
-            className="row overflow-y-scroll md:h-[350px] border-2 border-red-500"
+            className="row overflow-y-scroll md:h-[350px]"
             ref={cardContainerRef}
           >
             {productList &&
