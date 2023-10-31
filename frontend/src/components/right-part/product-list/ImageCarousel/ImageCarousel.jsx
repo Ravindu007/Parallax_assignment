@@ -21,7 +21,7 @@ const ImageCarousel = ({ imageArray }) => {
               src={imageArray[0].img1}
               alt=""
               className='d-block mx-auto'
-              style={{ height: '80px', width: 'auto' }}
+              style={{ height: '55px', width: 'auto' }}
             />
           </Carousel.Item>
           <Carousel.Item interval={800}>
@@ -29,7 +29,7 @@ const ImageCarousel = ({ imageArray }) => {
               src={imageArray[1].img2}
               alt=""
               className='d-block mx-auto'
-              style={{ height: '80px', width: 'auto' }}
+              style={{ height: '55px', width: 'auto' }}
             />
           </Carousel.Item>
           <Carousel.Item>
@@ -37,7 +37,7 @@ const ImageCarousel = ({ imageArray }) => {
               src={imageArray[2].img3}
               alt=""
               className='d-block mx-auto'
-              style={{ height: '80px', width: 'auto' }}
+              style={{ height: '55px', width: 'auto' }}
             />
           </Carousel.Item>
         </Carousel>

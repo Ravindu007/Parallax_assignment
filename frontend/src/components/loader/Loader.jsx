@@ -1,9 +1,14 @@
 import React from 'react'
+import { Loader } from 'rsuite';
 
-const Loader = () => {
+
+const LoadingComponent = () => {
   return (
-    <div className='w-full bg-yellow-400 h-fit'>Loading...1.2.3</div>
+    <div className='w-full h-fit'>
+       <Loader size="lg" content="Large" />
+      <hr />
+    </div>
   )
 }
 
-export default Loader
+export default LoadingComponent

@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import ImageCarousel from '../ImageCarousel/ImageCarousel';
 
 const ProductCard = ({ product }) => {
@@ -8,8 +9,8 @@ const ProductCard = ({ product }) => {
       <div className="card md:h-[110px] w-full flex flex-col items-center">
         <ImageCarousel imageArray={product.productImgs}/>
         <h2>{product.product_name}</h2>
-        <h2 className='text-xs'>{product.product_quantity}</h2>
-        <h2 className='text-xs'>{product.product_price}</h2>
+        {/* <h2>{product.product_quantity}</h2>
+        <h2>{product.product_price}</h2> */}
       </div>
     </div>
   );

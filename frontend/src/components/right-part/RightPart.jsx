@@ -3,7 +3,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchProducts } from '../../redux/actions/ProductActions';
 import ProductCard from './product-list/ProductCard/ProductCard';
-import Loader from '../loader/Loader';
+import ButtonRow from '../ButtonRow/ButtonRow';
+import LoadingComponent from '../loader/Loader';
 
 const RightPart = ({ fetchProducts, allProducts }) => {
   const [productList, setProductList] = useState([]);
@@ -51,7 +52,7 @@ const RightPart = ({ fetchProducts, allProducts }) => {
           setOccurance((prev) => prev + 1);
           setPage((prev) => prev + 1);
           setIsLoading(true);
-        }, 100);
+        }, 300);
       }
     }
   };
@@ -73,6 +74,8 @@ const RightPart = ({ fetchProducts, allProducts }) => {
       <div className="container m-2">
         {/* filter row */}
         <div className="row">{/* ... (your filter inputs) */}</div>
+
+
         {/* product list */}
         <div className="row px-2">
           <div
@@ -83,10 +86,17 @@ const RightPart = ({ fetchProducts, allProducts }) => {
               productList.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
-            {isLoading ? <Loader /> : '...'}
+            {isLoading ? <LoadingComponent /> : '...'}
           </div>
         </div>
+        
+        {/* button list */}
+        <div className="row">
+          <ButtonRow/>
+        </div>
+
       </div>
+
     </div>
   );
 };
